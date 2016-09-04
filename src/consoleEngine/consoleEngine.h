@@ -1,12 +1,31 @@
+#include <string>
 #include <pthread.h>
+#include <time.h>
+#include <signal.h>
+#include <unistd.h>
+#include <assert.h>
+#include <ncurses.h>
 
 class ConsoleEngine
 {
 	private:
-		pthread_t threadHandle;
+		pthread_t		outputThreadHandle;
+		unsigned int	height;
+		unsigned int	width;
+		bool			running;
+		bool			exitRequested;
+		WINDOW*			windowHandle;
 
-		static void* threadFunction( void* );
+		static void*	outputThreadFunction( void* );
+
+		void 			writeOutput( void );
+		void			initializeOutput( void );
 
 	public:
-		ConsoleEngine( void );
+		ConsoleEngine( unsigned int, unsigned int );
+		~ConsoleEngine( void );
+
+		bool			IsRunning( void );
+
+		void			Shutdown( void );
 };
